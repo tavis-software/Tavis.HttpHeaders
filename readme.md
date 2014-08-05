@@ -13,7 +13,7 @@ The syntax rules for a header can be defined as follows:
                 new Token("parameter")
             };
 
-The grammar primitive objects encapsulate the syntax rules as defined by the HTTP specification.
+The grammar primitive objects encapsulate the rules for permitted characters as defined by the HTTP specification.
 
 The syntax rule can be used to parse a raw header like this,
 
