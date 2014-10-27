@@ -1,4 +1,4 @@
-﻿namespace Tavis.Headers
+﻿namespace Tavis.Headers.Elements
 {
     public class Parameter
     {

@@ -19,12 +19,17 @@ namespace Headers
         public override ParseNode Consume(Inputdata input)
         {
             input.Mark();
-            if (_literal != input.GetNext(_literal.Length))
+            if (!IsValid(input.GetNext(_literal.Length)))
             {
                 input.MoveToMark();
                 return null;
             }
             return new ParseNode(this,input.GetSinceMark());
+        }
+
+        private bool IsValid(string input)
+        {
+            return _literal == input;
         }
     }
 }

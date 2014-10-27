@@ -1,4 +1,6 @@
-﻿using Headers.Parser;
+﻿using System;
+using System.Xml;
+using Headers.Parser;
 
 namespace Headers
 {
@@ -55,85 +57,177 @@ namespace Headers
         }
     }
 
-    public class Comment : Terminal
+    
+    public abstract class BasicRule : Terminal
     {
-        public Comment(string identifier) : base(identifier) {
+        private readonly int _length;
+
+        public BasicRule(string ruleName, int length = 0)
+            : base(ruleName)
+        {
+            _length = length;
         }
 
         public override ParseNode Consume(Inputdata input)
         {
             input.Mark();
-
-            var firstChar = input.GetNext();
-            if (firstChar != '(')
-            {
-                input.MoveBack();
-                return null;
-            }
-
             var delimfound = false;
-            while (!delimfound)
+            var size = 0;
+            while (!delimfound )
             {
-                if (input.AtEnd)
+                if (input.AtEnd || (_length > 0 && size == _length))
                 {
                     delimfound = true;
                 }
-                else
+                else 
                 {
                     var currentChar = input.GetNext();
-                    switch (currentChar)
+                    if (!IsValidChar(currentChar))
                     {
-                        case ')':
-                            delimfound = true;
-                            //input.MoveBack();
-                            break;
+                        delimfound = true;
+                        input.MoveBack();
                     }
+                    size++;
                 }
             }
             var text = input.GetSinceMark();
             return new ParseNode(this, text);
+        }
+
+        protected abstract bool IsValidChar(char currentChar);
+    }
+
+    public class Char : BasicRule
+    {
+        public Char() : base("CHAR")
+        {
+        }
+
+        protected override bool IsValidChar(char currentChar)
+        {
+            return (currentChar >= 0x01 || currentChar <= 0x7F);
         }
     }
 
-    public class QuotedString : Terminal
+    public class Alpha : BasicRule
     {
-        public QuotedString(string identifier)
-            : base(identifier)
+        public Alpha() : base("ALPHA")
         {
         }
 
-        public override ParseNode Consume(Inputdata input)
+        protected override bool IsValidChar(char currentChar)
         {
-            input.Mark();
+            return (currentChar >= 0x41 && currentChar <= 0x5A) || (currentChar >= 0x61 && currentChar <= 0x7A);
+        }
+    }
 
-            var firstChar = input.GetNext();
-            if (firstChar != '"')
-            {
-                input.MoveBack();
-                return null;
-            }
+    public class Digit : BasicRule
+    {
+        public Digit(int length = 0) : base("DIGIT",length)
+        {
+        }
 
-            var delimfound = false;
-            while (!delimfound)
-            {
-                if (input.AtEnd)
-                {
-                    delimfound = true;
-                }
-                else
-                {
-                    var currentChar = input.GetNext();
-                    switch (currentChar)
-                    {
-                        case '"':
-                            delimfound = true;
-                            //input.MoveBack();
-                            break;
-                    }
-                }
-            }
-            var text = input.GetSinceMark();
-            return new ParseNode(this, text);
+        protected override bool IsValidChar(char currentChar)
+        {
+            return (currentChar >= 0x30 && currentChar <= 0x39);
+        }
+    }
+
+
+    public class HexDigit : BasicRule
+    {
+        public HexDigit() : base("HEXDIG")
+        {
+        }
+
+        protected override bool IsValidChar(char currentChar)
+        {
+            return (currentChar >= 0x30 && currentChar <= 0x39) || (currentChar >= 0x41 && currentChar <= 0x46);
+        }
+    }
+
+    public class Vchar : BasicRule
+    {
+        public Vchar() : base("VCHAR")
+        {
+        }
+
+        protected override bool IsValidChar(char currentChar)
+        {
+            return (currentChar >= 0x30 && currentChar <= 0x39) || (currentChar >= 0x41 && currentChar <= 0x46);
+        }
+    }
+    public class Octet : BasicRule
+    {
+        public Octet() : base("OCTET")
+        {
+        }
+
+        protected override bool IsValidChar(char currentChar)
+        {
+            return (currentChar >= 0x00 && currentChar <= 0xFF);
+        }
+    }
+
+    public class WSP : BasicRule
+    {
+        public WSP() : base("WSP")
+        {
+        }
+
+        protected override bool IsValidChar(char currentChar)
+        {
+            return (currentChar == ' ' && currentChar == '\t');
+        }
+    }
+
+    public class Ctl : BasicRule
+    {
+        public Ctl()
+            : base("CTL")
+        {
+        }
+
+        protected override bool IsValidChar(char currentChar)
+        {
+            return (currentChar >= 0x00 && currentChar <= 0x1F) && currentChar == 0x7F;
+        }
+    }
+
+    public class Cr : Literal
+    {
+        public Cr() :base("\r")
+        {
+        }
+    }
+
+    public class CrLf : Literal
+    {
+        public CrLf() : base("\r\n")
+        {
+        }
+    }
+
+    public class Lf : Literal
+    {
+        public Lf() : base("\n")
+        {
+        }
+    }
+
+    public class Sp : Literal
+    {
+        public Sp()
+            : base(" ")
+        {
+        }
+    }
+
+    public class DQuote : Literal
+    {
+        public DQuote()
+            : base("\"")
+        {
         }
     }
 

@@ -36,12 +36,16 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AcceptHeader.cs" />
     <Compile Include="Grammar\CommaList.cs" />
+    <Compile Include="Grammar\Comment.cs" />
     <Compile Include="Grammar\DelimitedList.cs" />
     <Compile Include="Grammar\IHeaderFieldValue.cs" />
     <Compile Include="Grammar\Header.cs" />
-    <Compile Include="MediaType.cs" />
-    <Compile Include="Parameter.cs" />
+    <Compile Include="Grammar\QuotedString.cs" />
+    <Compile Include="HostHeader.cs" />
+    <Compile Include="Elements\MediaType.cs" />
+    <Compile Include="Elements\Parameter.cs" />
     <Compile Include="Parser\Expression.cs" />
     <Compile Include="Grammar\Inputdata.cs" />
     <Compile Include="Parser\IExpression.cs" />
@@ -52,12 +56,13 @@
     <Compile Include="Grammar\Literal.cs" />
     <Compile Include="Grammar\Ows.cs" />
     <Compile Include="Parser\UnaryExpression.cs" />
-    <Compile Include="Product.cs" />
+    <Compile Include="Elements\Product.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Grammar\Rws.cs" />
     <Compile Include="Grammar\SemiColonList.cs" />
     <Compile Include="AuthorizationHeader.cs" />
     <Compile Include="ContentTypeHeader.cs" />
+    <Compile Include="RefererHeader.cs" />
     <Compile Include="UserAgentHeader.cs" />
     <Compile Include="Grammar\Token.cs" />
   </ItemGroup>

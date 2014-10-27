@@ -1,9 +1,15 @@
 ﻿using System.Collections.Generic;
 using Headers;
 using Headers.Parser;
+using Tavis.Headers.Elements;
 
 namespace Tavis.Headers
 {
+
+    //   media-type = type "/" subtype *( OWS ";" OWS parameter )
+    // type = token
+    // subtype = token
+    // parameter = token "=" ( token / quoted-string )
     public class ContentTypeHeaderValue
     {
     
@@ -40,11 +46,7 @@ namespace Tavis.Headers
             var node = _Syntax.Consume(new Inputdata(rawHeaderValue));
 
             var mediaTypeNode = node.ChildNode("mediatype");
-            headerValue.MediaType = new MediaType()
-            {
-                Type = mediaTypeNode.ChildNode("type").Text,
-                SubType = mediaTypeNode.ChildNode("subtype").Text
-            };
+            headerValue.MediaType = MediaType.Create(mediaTypeNode);
             var parameters = node.ChildNode("parameters");
             
             foreach (var parameterNode in parameters.ChildNodes)

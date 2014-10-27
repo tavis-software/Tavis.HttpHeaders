@@ -30,8 +30,7 @@ namespace Tavis.Headers
 
         private static IExpression _Syntax = new Expression("useragent")
         {
-            new Token("product"),
-            new OptionalExpression("versionex") {new Literal("/"), new Token("version")}, //Optional version
+            Product.Syntax,
             new Rws(),
             new DelimitedList("productorcomments", " ", new Expression("token")
             {
@@ -39,11 +38,7 @@ namespace Tavis.Headers
                 new OrExpression("productorcomment")
                 {
                     new Comment("comment"),
-                    new Expression("productex")
-                    {
-                        new Token("product"),
-                        new OptionalExpression("versionex") {new Literal("/"), new Token("version")}
-                    }
+                    Product.Syntax
                 }
             })
         };
@@ -53,22 +48,22 @@ namespace Tavis.Headers
             var node = _Syntax.Consume(new Inputdata(rawHeaderValue));
             var headerValue = new UserAgentHeaderValue();
 
-            if (node.ChildNode("product") != null)
+            if (node["product"] != null)
             {
-                headerValue.Products.Add(CreateProduct(node));
+                headerValue.Products.Add(Product.CreateProduct(node["product"]));
             }
-            if (node.ChildNode("productorcomments") != null)
+            if (node["productorcomments"] != null)
             {
-                foreach (var childnode in node.ChildNode("productorcomments").ChildNodes)
+                foreach (var childnode in node["productorcomments"].ChildNodes)
                 {
-                    if (childnode.ChildNode("comment") != null)
+                    if (childnode["comment"] != null)
                     {
                         var lastProduct = headerValue.Products.Last();
-                        lastProduct.Comments.Add(childnode.ChildNode("comment").Text);
+                        lastProduct.Comments.Add(childnode["comment"].Text);
                     }
                     else
                     {
-                        headerValue.Products.Add(CreateProduct(childnode.ChildNode("productex")));
+                        headerValue.Products.Add(Product.CreateProduct(childnode["product"]));
                     }
                 }
             }
@@ -76,15 +71,6 @@ namespace Tavis.Headers
             return headerValue;
         }
 
-        private static Product CreateProduct(ParseNode parseNode)
-        {
-            var product = new Product();
-            product.Name = parseNode.ChildNode("product").Text;
-            if (parseNode.ChildNode("versionex").NotPresent == false)
-            {
-                product.Version = parseNode.ChildNode("versionex").ChildNode("version").Text;
-            }
-            return product;
-        }
+   
     }
 }

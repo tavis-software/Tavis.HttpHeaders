@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Text;
+using Headers;
+using Headers.Parser;
 
 
 namespace Tavis.Headers
@@ -12,6 +14,13 @@ namespace Tavis.Headers
         public string Name { get; set; }
         public string Version { get; set; }
         public List<string> Comments { get; private set; }
+
+        public static readonly IExpression Syntax = new Expression("product")
+        {
+            new Token("product-token"),
+            new OptionalExpression("product-version") {new Literal("/"), new Token("version-token")}
+        };
+
 
         public Product()
         {
@@ -34,6 +43,17 @@ namespace Tavis.Headers
                 sb.Append(" ");
                 sb.Append(String.Join(" ", Comments));
             }
+        }
+
+        public static Product CreateProduct(ParseNode parseNode)
+        {
+            var product = new Product();
+            product.Name = parseNode.ChildNode("product-token").Text;
+            if (parseNode.ChildNode("product-version").NotPresent == false)
+            {
+                product.Version = parseNode.ChildNode("product-version").ChildNode("version-token").Text;
+            }
+            return product;
         }
     }
 }

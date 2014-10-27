@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Headers.Parser
 {
+    [DebuggerDisplay("Identifier = {Expression.Identifier}")]
     public class ParseNode 
     {
         public IExpression Expression { get; private set; }
@@ -25,7 +27,11 @@ namespace Headers.Parser
                         parameter => parameter.ChildNodes.Where(n => n.Expression.Identifier == identifier).Any(n => n.Text == value));
             
         }
-        
+
+        public ParseNode this[string identifier] 
+        {
+            get { return ChildNode(identifier); }
+        }
         public ParseNode ChildNode(string identifier)
         {
             return ChildNodes.FirstOrDefault(n => n.Expression.Identifier == identifier);
