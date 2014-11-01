@@ -14,7 +14,7 @@ namespace Tavis.Headers
         public string Name { get; set; }
         public string Version { get; set; }
         public List<string> Comments { get; private set; }
-
+        
         public static readonly IExpression Syntax = new Expression("product")
         {
             new Token("product-token"),

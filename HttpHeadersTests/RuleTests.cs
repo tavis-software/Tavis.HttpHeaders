@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Headers;
 using Headers.Parser;
 using Tavis.Headers;
+using Tavis.Headers.Elements;
 using Xunit;
 using Xunit.Extensions;
 
@@ -102,22 +104,9 @@ namespace HeadersTests
             
             var contentType = new Expression("contenttype")
             {
-                new Expression("mediatype")
-                {
-                    new Token("type"),
-                    new Literal("/"),
-                    new Token("subtype"),
-
-                },
+                MediaType.Syntax,
                 new Literal(";"),
-                new SemiColonList("parameters", new Expression("parameter")
-                {
-                    new Token("name"),
-                    new Ows(),
-                    new Literal("="),
-                    new Ows(),
-                    new Token("value")
-                })
+                new SemiColonList("parameters",  Parameter.Syntax)
             };
 
             var contentTypeNode = contentType.Consume(new Inputdata("application/xml;charset=utf-8;schema=false"));
@@ -260,6 +249,167 @@ namespace HeadersTests
 
             Assert.Equal("Basic",authHeaderNode.ChildNode("scheme").Text);
             Assert.Equal("asddasdasdasdasd", authHeaderNode.ChildNode("parameter").Text);
+
+        }
+
+        [Fact]
+        public void UnrelatedArbitraryCommandPhrase()
+        {
+            var x = new Expression("cmd")
+            {
+                new Ows(),
+                new Literal("runscope:"),
+                new Ows(),
+                new Headers.Char("command")
+            };
+
+            var parsedNode = x.Consume(new Inputdata("runscope:blah blah"));
+
+            Assert.Equal("blah blah", parsedNode.ChildNode("command").Text);
+        }
+
+        //public static IExpression CommandSyntax = new Expression("cmd")
+        //    {
+        //        new Ows(),
+        //        new Literal("runscope:"),
+        //        new Ows(),
+        //        new Headers.Token("verb"),
+        //        new Rws(),
+        //        new Headers.Token("bucket"),
+        //        new Ows(),
+        //        new OptionalExpression("testphrase")
+        //        {
+        //            new Literal("/"),
+        //            new Ows(),
+        //            new Headers.Token("test")
+        //        },
+        //        new OptionalExpression("paramlist")
+        //        {
+        //            new Rws(),
+        //            new Literal("with"),
+        //            new CommaList("parameters",Parameter.Syntax)    
+        //        }
+                
+        //    };
+
+        public static IExpression CommandSyntax = new Expression("cmd")
+            {
+                new Ows(),
+                new Literal("runscope:"),
+                new Ows(),
+                new Headers.Token("verb"),
+                new Rws(),
+                new Headers.QuotedString("bucket"),
+                new Ows(),
+                new OptionalExpression("testphrase")
+                {
+                    new Literal("/"),
+                    new Headers.QuotedString("test")
+                },
+                new OptionalExpression("paramlist")
+                {
+                    new Rws(),
+                    new Literal("with"),
+                    new CommaList("parameters",Parameter.Syntax)    
+                }
+                
+            };
+
+
+        [Fact]
+        public void UnrelatedArbitraryCommandPhrase2()
+        {
+            
+
+            var parsedNode = CommandSyntax.Consume(new Inputdata("runscope: run  \"mybucket\" with domain = prod"));
+
+            Assert.Equal("run", parsedNode.ChildNode("verb").Text);
+            Assert.Equal("mybucket", parsedNode.ChildNode("bucket").Text);
+            var paramlist = parsedNode.ChildNode("paramlist");
+            Assert.NotNull( paramlist);
+            
+            var parameter = Parameter.Create(paramlist.ChildNode("parameters").ChildNodes.First());
+            Assert.Equal("domain", parameter.Name);
+            Assert.Equal("prod", parameter.Value);
+            
+        }
+        [Fact]
+        public void CommandPhraseWithMultipleParameters()
+        {
+
+
+            var parsedNode = CommandSyntax.Consume(new Inputdata("runscope: run  \"mybucket\" with domain = prod , x= y"));
+
+            Assert.Equal("run", parsedNode.ChildNode("verb").Text);
+            Assert.Equal("mybucket", parsedNode.ChildNode("bucket").Text);
+            var paramlist = parsedNode.ChildNode("paramlist");
+            Assert.NotNull(paramlist);
+
+            var parameter = Parameter.Create(paramlist.ChildNode("parameters").ChildNodes.First());
+            Assert.Equal("domain", parameter.Name);
+            Assert.Equal("prod", parameter.Value);
+            var parameter2 = Parameter.Create(paramlist.ChildNode("parameters").ChildNodes.Last());
+            Assert.Equal("x", parameter2.Name);
+            Assert.Equal("y", parameter2.Value);
+
+        }
+
+
+        [Fact]
+        public void BenchmarkCommandPhrase()
+        {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            for (int i = 0; i < 100000; i++)
+            {
+                var parsedNode = CommandSyntax.Consume(new Inputdata("runscope: run  \"mybucket\"/\"test\" with domain = prod , x= y"));    
+            }
+            stopwatch.Stop();
+            Console.WriteLine("Elapsed time {0:D}", stopwatch.ElapsedMilliseconds);
+
+            
+        }
+
+        [Fact]
+        public void CommandPhraseWithNoParameters()
+        {
+
+
+            var parsedNode = CommandSyntax.Consume(new Inputdata("runscope: run  \"mybucket\""));
+
+            Assert.Equal("run", parsedNode.ChildNode("verb").Text);
+            Assert.Equal("mybucket", parsedNode.ChildNode("bucket").Text);
+            var paramlist = parsedNode.ChildNode("paramlist");
+            Assert.Null(paramlist.ChildNodes);
+
+        }
+
+        [Theory,
+        InlineData("runscope: run  \"mybucket\"/\"mytest\"")
+        ]
+        public void CommandPhraseWithBucketAndTest(string command)
+        {
+
+            var parsedNode = CommandSyntax.Consume(new Inputdata(command));
+
+            Assert.Equal("run", parsedNode.ChildNode("verb").Text);
+            Assert.Equal("mybucket", parsedNode.ChildNode("bucket").Text);
+            var testphrase = parsedNode.ChildNode("testphrase");
+            Assert.Equal("mytest", testphrase.ChildNode("test").Text);
+            var paramlist = parsedNode.ChildNode("paramlist");
+            Assert.Null(paramlist.ChildNodes);
+
+        }
+
+        [Fact]
+        public void SingleParameter()
+        {
+
+            var parsedNode = Parameter.Syntax.Consume(new Inputdata("r = y"));
+
+            var parameter = Parameter.Create(parsedNode);
+            Assert.Equal("r", parameter.Name);
+            Assert.Equal("y", parameter.Value);
 
         }
 

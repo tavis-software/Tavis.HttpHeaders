@@ -5,10 +5,10 @@ namespace Headers
 {
     public class DelimitedList : Expression
     {
-        private readonly Expression _innerExpression;
+        private readonly IExpression _innerExpression;
         private readonly Literal _delimiter;
 
-        public DelimitedList(string identifier, string delimiter, Expression innerExpression) : base(identifier)
+        public DelimitedList(string identifier, string delimiter, IExpression innerExpression) : base(identifier)
         {
             _innerExpression = innerExpression;
 

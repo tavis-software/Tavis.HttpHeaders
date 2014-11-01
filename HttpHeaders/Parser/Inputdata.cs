@@ -36,6 +36,21 @@ namespace Headers
             Index--;
         }
 
+        public string Processed
+        {
+            get
+            {
+                return Input.Substring(0, Index);
+            }
+        }
+        public string SinceMark
+        {
+            get
+            {
+                return Input.Substring(_Mark, Index - _Mark);
+            }
+        }
+
         internal void Mark()
         {
             _Mark = Index;

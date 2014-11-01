@@ -4,7 +4,7 @@ namespace Headers
 {
     public class CommaList : DelimitedList
     {
-        public CommaList(string identifier, Expression innerExpression)
+        public CommaList(string identifier, IExpression innerExpression)
             : base(identifier, ",", innerExpression)
         {
 

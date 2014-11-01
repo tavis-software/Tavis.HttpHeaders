@@ -11,14 +11,15 @@ namespace Headers
 
         public override ParseNode Consume(Inputdata input)
         {
-            input.Mark();
+            
 
             var firstChar = input.GetNext();
             if (firstChar != '"')
             {
-                input.MoveBack();
+               
                 return null;
             }
+            input.Mark();
 
             var delimfound = false;
             while (!delimfound)
@@ -34,12 +35,13 @@ namespace Headers
                     {
                         case '"':
                             delimfound = true;
-                            //input.MoveBack();
+                            input.MoveBack();
                             break;
                     }
                 }
             }
             var text = input.GetSinceMark();
+            input.GetNext(); //Throw away closing quote
             return new ParseNode(this, text);
         }
     }

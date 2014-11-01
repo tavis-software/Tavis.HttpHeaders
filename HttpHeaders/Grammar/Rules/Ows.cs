@@ -17,17 +17,10 @@ namespace Headers
             {
                 inputChar = input.GetNext();
             }
-            if (!input.AtEnd) input.MoveBack();
-            var capture = input.GetSinceMark(); 
-            if (capture.Length > 0)
-            {
-                return new ParseNode(this, capture);
-            }
-            else
-            {
-                return null;
-            }
-            
+            if (!(inputChar == ' ' || inputChar == '\t')) input.MoveBack();
+            var capture = input.GetSinceMark();
+            return new ParseNode(this, capture);
+           
         }
     }
 }

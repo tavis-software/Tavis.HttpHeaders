@@ -4,7 +4,7 @@ namespace Headers
 {
     public class SemiColonList : DelimitedList
     {
-        public SemiColonList(string identifier, Expression innerExpression)
+        public SemiColonList(string identifier, IExpression innerExpression)
             : base(identifier, ";", innerExpression)
         {
             
