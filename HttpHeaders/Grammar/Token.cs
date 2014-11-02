@@ -1,59 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Xml;
 using Headers.Parser;
 
 namespace Headers
 {
-    public class Token : Terminal
-    {
-     
-        public Token(string identifier) : base(identifier)
-        {
-          
-        }
 
-        public override ParseNode Consume(Inputdata input)
+    public class Token : BasicRule
+    {
+       public static HashSet<char> HttpTokenDelimiters = new HashSet<char>() {',', '/','(',')',',',';','<','=','>','?','@','[','\\',']','{','}','"',' ','\t'};
+
+       public Token(string identifier)
+           : base(identifier, (c) => !HttpTokenDelimiters.Contains(c))
         {
-            input.Mark();
-            var delimfound = false;
-            while (!delimfound)
-            {
-                if (input.AtEnd)
-                {
-                    delimfound = true;
-                }
-                else
-                {
-                    var currentChar = input.GetNext(); 
-                    switch (currentChar)
-                    {
-                        case ',': 
-                        case '/':
-                        case '(':
-                        case ')':
-                        case ':':
-                        case ';':
-                        case '<':
-                        case '=':
-                        case '>':
-                        case '?':
-                        case '@':
-                        case '[':
-                        case '\\':
-                        case ']':
-                        case '{':
-                        case '}':
-                        case '"':
-                        case ' ':
-                        case '\t':
-                            delimfound = true;
-                            input.MoveBack();
-                            break;
-                    }
-                }
-            }
-            var text = input.GetSinceMark();
-            return new ParseNode(this,text);
+            
         }
     }
+
+
+    
 }

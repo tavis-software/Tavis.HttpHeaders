@@ -15,7 +15,7 @@ namespace Tavis.HeadersTests
         public void Should_parse_alpha_value()
         {
 
-            var alpha = new Alpha();
+            var alpha = new BasicRule("ALPHA", BasicRule.Alpha);
 
             var input = new Inputdata("hereIsSomeAlpha!and other stuff");
 
@@ -27,7 +27,7 @@ namespace Tavis.HeadersTests
         public void Should_parse_alpha_value_()
         {
 
-            var alpha = new Alpha();
+            var alpha = new BasicRule("ALPHA",BasicRule.Alpha);
 
             var input = new Inputdata("hereIsSomeAlpha!and other stuff");
 
@@ -39,7 +39,7 @@ namespace Tavis.HeadersTests
         public void Should_return_empty_if_no_alpha_value()
         {
 
-            var alpha = new Alpha();
+            var alpha = new BasicRule("ALPHA", BasicRule.Alpha); ;
 
             var input = new Inputdata("@#hereIsSomeAlpha!and other stuff");
 
@@ -52,7 +52,7 @@ namespace Tavis.HeadersTests
         public void Should_parse_Digit_value_up_to_length()
         {
 
-            var alpha = new Digit(3);
+            var alpha = new BasicRule("DIGIT",BasicRule.Digit,3);
 
             var input = new Inputdata("8392323");
 

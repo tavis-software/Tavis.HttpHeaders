@@ -205,7 +205,7 @@ namespace HeadersTests
             var primaryProductNode = userAgentNode.ChildNode("product");
             var primaryVersionNode = userAgentNode.ChildNode("versionex");
             var productOrCommentsNode = userAgentNode.ChildNode("productorcomments");
-            Assert.Equal("(compatible; Linux 2.6.22)", productOrCommentsNode.ChildNodes.First().ChildNode("comment").Text);
+            Assert.Equal("compatible; Linux 2.6.22", productOrCommentsNode.ChildNodes.First().ChildNode("comment").Text);
             Assert.Equal("Mozilla", primaryProductNode.Text);
             Assert.Equal("4.0", primaryVersionNode.ChildNode("version").Text);
             Assert.Equal(4,productOrCommentsNode.ChildNodes.Count);
@@ -222,8 +222,8 @@ namespace HeadersTests
                     "Mozilla/4.0 (compatible; Linux 2.6.22) NetFront/3.4 Kindle/2.5 (screen 824x1200;rotate)");
             var primaryProduct = userAgent.Products.First();
             var lastProduct = userAgent.Products.Last();
-            Assert.Equal("(compatible; Linux 2.6.22)", primaryProduct.Comments.First());
-            Assert.Equal("(screen 824x1200;rotate)", lastProduct.Comments.First());
+            Assert.Equal("compatible; Linux 2.6.22", primaryProduct.Comments.First());
+            Assert.Equal("screen 824x1200;rotate", lastProduct.Comments.First());
 
             Assert.Equal("Mozilla", primaryProduct.Name);
             Assert.Equal("4.0", primaryProduct.Version);
@@ -260,7 +260,7 @@ namespace HeadersTests
                 new Ows(),
                 new Literal("runscope:"),
                 new Ows(),
-                new Headers.Char("command")
+                new BasicRule("command", BasicRule.Char)
             };
 
             var parsedNode = x.Consume(new Inputdata("runscope:blah blah"));

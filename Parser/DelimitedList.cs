@@ -19,7 +19,7 @@ namespace Headers
         
         public override ParseNode Consume(Inputdata input)
         {
-            var ows = new Ows();
+            var ows = new BasicRule(null,BasicRule.Whitespace);
             var list = new List<ParseNode>();
             do {
                 ows.Consume(input);
