@@ -1,5 +1,5 @@
 ﻿using Headers;
-using Headers.Parser;
+using Tavis.Parser;
 
 namespace Tavis.Headers.Elements
 {

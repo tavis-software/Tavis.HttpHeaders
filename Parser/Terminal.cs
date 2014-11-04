@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Headers.Parser
+﻿namespace Tavis.Parser
 {
     public abstract class Terminal : IExpression
     {

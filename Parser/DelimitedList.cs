@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Headers.Parser;
 
-namespace Headers
+
+namespace Tavis.Parser
 {
     public class DelimitedList : Expression
     {

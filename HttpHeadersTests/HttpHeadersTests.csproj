@@ -46,7 +46,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicRuleTests.cs" />
+    <Compile Include="OrExpressionTests.cs" />
     <Compile Include="PerfTests.cs" />
+    <Compile Include="QValueTest.cs" />
     <Compile Include="RuleTests.cs" />
     <Compile Include="TokenTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

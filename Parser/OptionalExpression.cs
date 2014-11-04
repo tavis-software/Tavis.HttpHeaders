@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Headers.Parser
+namespace Tavis.Parser
 {
     public class OptionalExpression : List<IExpression>, IExpression
     {
@@ -19,10 +19,10 @@ namespace Headers.Parser
             foreach (var expression in this)
             {
                 var result = expression.Consume(input);
-                if (result == null)
+                if (result == null || !result.Present)
                 {
                     input.MoveToMark();  // If any part of the optional expression fails then it will be considered missing.
-                    return new ParseNode(this, "") {NotPresent = true};
+                    return new ParseNode(this, "") {Present = false};
                 }
                 list.Add(result);
             }

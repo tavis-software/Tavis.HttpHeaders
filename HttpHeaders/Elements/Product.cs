@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Text;
 using Headers;
-using Headers.Parser;
+using Tavis.Parser;
 
 
 namespace Tavis.Headers
@@ -49,7 +49,7 @@ namespace Tavis.Headers
         {
             var product = new Product();
             product.Name = parseNode.ChildNode("product-token").Text;
-            if (parseNode.ChildNode("product-version").NotPresent == false)
+            if (parseNode.ChildNode("product-version").Present)
             {
                 product.Version = parseNode.ChildNode("product-version").ChildNode("version-token").Text;
             }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Headers;
-using Headers.Parser;
 using Tavis.Headers.Elements;
+using Tavis.Parser;
 
 namespace Tavis.Headers
 {

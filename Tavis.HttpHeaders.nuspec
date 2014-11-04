@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Tavis.HttpHeaders</id>
+    <version>0.5.0-beta</version>
+    <title>Tavis.HttpHeaders</title>
+    <authors>Darrel Miller</authors>
+    <owners>Tavis Software Inc.</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Semantically rich parsing for HTTP headers</description>
+    <copyright>Copyright 2014</copyright>
+    <releaseNotes>Added missing JSON dependendency</releaseNotes>
+  </metadata>
+
+  <files>
+     <file src="HttpHeaders\bin\release\Tavis.HttpHeaders.dll" target="lib\portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10" />
+     <file src="HttpHeaders\bin\release\Tavis.Parser.dll" target="lib\portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10" />
+
+  </files>
+</package>

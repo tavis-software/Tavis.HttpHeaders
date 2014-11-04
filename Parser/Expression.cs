@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
-namespace Headers.Parser
+
+namespace Tavis.Parser
 {
     public class Expression : List<IExpression>, IExpression
     {
@@ -17,7 +18,8 @@ namespace Headers.Parser
             foreach (var chunk in this)
             {
                 var node = chunk.Consume(input);
-                if (node != null) list.Add(node);
+                if (node == null) return new ParseNode(this,""){Error = "Token " + chunk.Identifier + " could not be parsed"};
+                list.Add(node);
             }
             var token = new ParseNode(this,"") {ChildNodes = list};
             return token;

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 using Headers;
-using Headers.Parser;
+using Tavis.Parser;
 
 namespace Tavis.Headers
 {

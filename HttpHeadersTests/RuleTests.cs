@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Headers;
-using Headers.Parser;
 using Tavis.Headers;
 using Tavis.Headers.Elements;
+using Tavis.Parser;
 using Xunit;
 using Xunit.Extensions;
 
@@ -63,7 +63,8 @@ namespace HeadersTests
             Assert.Equal(3, tokens.Count());
         }
 
-        
+
+
         [Theory, InlineData("charset=utf-8"),
         InlineData(" charset=utf-8"),
         InlineData("charset =utf-8"),
@@ -173,7 +174,7 @@ namespace HeadersTests
 
             Assert.Equal("foo", node.ChildNode("product").Text);
             Assert.Equal("",node.ChildNode("versionex").Text);
-            Assert.Equal(true, node.ChildNode("versionex").NotPresent);
+            Assert.Equal(false, node.ChildNode("versionex").Present);
             
         }
 
@@ -186,9 +187,7 @@ namespace HeadersTests
                 new Token("product"),
                 new OptionalExpression("versionex"){ new Literal("/"), new Token("version") },  //Optional version
                 new Rws(),
-                new DelimitedList("productorcomments", " ", new Expression("token")
-                {
-                    new Ows(),
+                new DelimitedList("productorcomments", " ", 
                     new OrExpression("productorcomment") {
                             new Comment("comment"), 
                             new Expression("productex")
@@ -196,7 +195,7 @@ namespace HeadersTests
                                 new Token("product"),
                                 new OptionalExpression("versionex"){ new Literal("/"), new Token("version") }
                             }   
-                    }
+                    
                 })
             };
 
@@ -205,7 +204,7 @@ namespace HeadersTests
             var primaryProductNode = userAgentNode.ChildNode("product");
             var primaryVersionNode = userAgentNode.ChildNode("versionex");
             var productOrCommentsNode = userAgentNode.ChildNode("productorcomments");
-            Assert.Equal("compatible; Linux 2.6.22", productOrCommentsNode.ChildNodes.First().ChildNode("comment").Text);
+            Assert.Equal("compatible; Linux 2.6.22", productOrCommentsNode.ChildNodes.First().Text);
             Assert.Equal("Mozilla", primaryProductNode.Text);
             Assert.Equal("4.0", primaryVersionNode.ChildNode("version").Text);
             Assert.Equal(4,productOrCommentsNode.ChildNodes.Count);

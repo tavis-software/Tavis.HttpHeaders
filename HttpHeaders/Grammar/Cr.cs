@@ -1,4 +1,6 @@
-﻿namespace Headers
+﻿using Tavis.Parser;
+
+namespace Headers
 {
     public class Cr : Literal
     {

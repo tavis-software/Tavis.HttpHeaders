@@ -1,6 +1,5 @@
-using Headers.Parser;
 
-namespace Headers
+namespace Tavis.Parser
 {
     public class DelimitedToken : Terminal
     {

@@ -59,6 +59,7 @@
     <Compile Include="Grammar\SemiColonList.cs" />
     <Compile Include="AuthorizationHeader.cs" />
     <Compile Include="ContentTypeHeader.cs" />
+    <Compile Include="Qvalue.cs" />
     <Compile Include="RefererHeader.cs" />
     <Compile Include="UserAgentHeader.cs" />
     <Compile Include="Grammar\Token.cs" />

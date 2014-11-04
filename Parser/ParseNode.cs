@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace Headers.Parser
+namespace Tavis.Parser
 {
     [DebuggerDisplay("Identifier = {Expression.Identifier}")]
     public class ParseNode 
@@ -10,14 +10,15 @@ namespace Headers.Parser
         public IExpression Expression { get; private set; }
         public string Text { get; private set; }
         public List<ParseNode> ChildNodes { get; set; }
-        public bool NotPresent { get; set; }
+        public bool Present { get; set; }
         public string Error { get; set; }
 
         public ParseNode(IExpression expression, string text)
         {
             Expression = expression;
             Text = text;
-            
+            Present = true;
+
         }
 
 

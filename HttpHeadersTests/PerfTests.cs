@@ -6,8 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Headers;
-using Headers.Parser;
 using Tavis.Headers;
+using Tavis.Parser;
 using Xunit;
 
 namespace HeadersTests

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Headers.Parser
+namespace Tavis.Parser
 {
     public class OrExpression : List<IExpression>, IExpression
     {
@@ -19,7 +19,7 @@ namespace Headers.Parser
             foreach (var expression in this)
             {
                 var result = expression.Consume(input);
-                if (result != null)
+                if (result != null && result.Present && result.Error == null)
                 {
                     return result;
                 }
