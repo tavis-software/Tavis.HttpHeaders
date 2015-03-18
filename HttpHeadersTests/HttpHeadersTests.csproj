@@ -45,6 +45,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AcceptHeaderTests.cs" />
     <Compile Include="BasicRuleTests.cs" />
     <Compile Include="OrExpressionTests.cs" />
     <Compile Include="PerfTests.cs" />

@@ -242,7 +242,7 @@ namespace HeadersTests
             var authHeaderNode = AuthorizationHeaderValue.Parse("Basic asddasdasdasdasd");
 
             Assert.Equal("Basic",authHeaderNode.Scheme);
-            Assert.Equal("asddasdasdasdasd", authHeaderNode.Parameter);
+            Assert.Equal("asddasdasdasdasd", authHeaderNode.Token);
             Assert.Equal(0, authHeaderNode.Errors.Count);
         }
 

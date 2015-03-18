@@ -13,6 +13,7 @@ namespace Tavis.Parser
         public static Func<char, bool> HexDigit = (c) => (c >= 0x30 && c <= 0x39) || (c >= 0x41 && c <= 0x46);
         public static Func<char, bool> Octet = (c) => (c >= 0x00 && c <= 0xFF);
         public static Func<char, bool> Vchar = (c) => (c >= 0x30 && c <= 0x39) || (c >= 0x41 && c <= 0x46);  // Todo: fix!
+        public static Func<char, bool> Token68Char = (c) => (Alpha(c) || Digit(c) || c == '-' || c == '.' || c == '_' || c == '~' || c == '+' || c == '/');  
 
         private readonly Func<char,bool> _validator;
         private readonly int _length;

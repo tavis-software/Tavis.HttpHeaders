@@ -24,21 +24,56 @@ namespace Tavis.Headers
 
     public class AcceptHeader
     {
-        public IExpression Syntax = new RootExpression("accept")
+        public List<string> Errors { get; set; }
+        public List<WeightedMediaRange> MediaRanges { get; set; }
+ 
+        private static IExpression _Syntax = new RootExpression("accept")
         {
-            MediaRange.Syntax,
-            new OptionalExpression("accept-params") {
-            new DelimitedList("weight",";",Qvalue.Syntax),
-            new DelimitedList("accept-ext",";",new Expression()
-            {
-                new Token("accept-ext-name"), 
-                new OrExpression("accept-ext-value")
-                {
-                    new QuotedString("qvalue"),new Token("qtoken")
+            new CommaList("media-range-list", new Expression("media-range-item") { 
+                MediaRange.Syntax,
+                new OptionalExpression("accept-params") {
+                    new DelimitedList("weight",";",Qvalue.Syntax),
+                    new DelimitedList("accept-ext",";",new Expression()
+                    {
+                        new Token("accept-ext-name"), 
+                        new OptionalExpression("accept-ext-right") {
+                            new Literal("="),
+                            new OrExpression("accept-ext-value")
+                            {
+                                new QuotedString("qvalue"),new Token("qtoken")
+                            }
+                        }
+                    })
                 }
             })
-            }
         };
+
+        public class WeightedMediaRange
+        {
+            
+        }
+
+        public static AcceptHeader Parse(string rawHeaderValue)
+        {
+            var node = _Syntax.Consume(new Inputdata(rawHeaderValue));
+
+            var headerValue = new AcceptHeader
+            {
+                Errors = node.GetErrors()
+            };
+
+            foreach (var parseNode in node.ChildNodes.Where(c => c.Present))
+            {
+                switch (parseNode.Expression.Identifier)
+                {
+                    case "media-range-item":
+                        //headerValue.Scheme = parseNode.Text;
+                        break;
+                }
+            }
+
+            return headerValue;
+        }
     }
     
     public class MediaRange
