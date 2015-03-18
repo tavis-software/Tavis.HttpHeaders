@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -36,6 +37,28 @@ namespace Tavis.Parser
         public ParseNode ChildNode(string identifier)
         {
             return ChildNodes.FirstOrDefault(n => n.Expression.Identifier == identifier);
+        }
+
+        public List<string> GetErrors()
+        {
+            var errors = new List<string>();
+            LoadErrors(errors);
+            return errors;
+        }
+        private void LoadErrors(IList<string> errors)
+        {
+            if (!String.IsNullOrEmpty(Error))
+            {
+                errors.Add(Error);
+            }
+            if (ChildNodes ==null) return;
+            foreach (var childNode in ChildNodes)
+            {
+                if (childNode.Present)
+                {
+                    childNode.LoadErrors(errors);
+                }
+            }
         }
     }
 }

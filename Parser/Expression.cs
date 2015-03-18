@@ -24,5 +24,24 @@ namespace Tavis.Parser
             var token = new ParseNode(this,"") {ChildNodes = list};
             return token;
         }
+
+
+    }
+
+    public class RootExpression : Expression
+    {
+        public RootExpression(string identifier = null) :base(identifier)
+        {
+            
+        }
+        public override ParseNode Consume(Inputdata input)
+        {
+            var node =  base.Consume(input);
+            if (!input.AtEnd)
+            {
+                node.Error = "Unparsed characters remaining";
+            }
+            return node;
+        }
     }
 }

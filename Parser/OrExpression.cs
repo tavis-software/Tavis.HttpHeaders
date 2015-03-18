@@ -21,7 +21,7 @@ namespace Tavis.Parser
                 var result = expression.Consume(input);
                 if (result != null && result.Present && result.Error == null)
                 {
-                    return result;
+                    return result;  // Return first expression that doesn't fail to match
                 }
                 input.MoveToMark();
             }

@@ -9,21 +9,26 @@ namespace Headers
 {
     public class AuthorizationHeaderValue
     {
-        private static readonly IExpression _Syntax = new Expression("authorization")
+        private static readonly IExpression _Syntax = new RootExpression("authorization")
             {
                 new Token("scheme"),
-                new Rws(),
-                new Token("parameter")
+                new OptionalExpression("parameter") {new Rws(),new Token("parametervalue")}
             };
 
         public string Scheme { get; set; }
         public string Parameter { get; set; }
+        public List<string> Errors {get;set;}
 
         public static AuthorizationHeaderValue Parse(string rawHeaderValue)
         {
             var node = _Syntax.Consume(new Inputdata(rawHeaderValue));
-            var headerValue = new AuthorizationHeaderValue();
-            foreach (var parseNode in node.ChildNodes)
+           
+            var headerValue = new AuthorizationHeaderValue
+            {
+                Errors = node.GetErrors()
+            };
+
+            foreach (var parseNode in node.ChildNodes.Where(c => c.Present))
             {
                 switch (parseNode.Expression.Identifier)
                 {
@@ -31,7 +36,7 @@ namespace Headers
                         headerValue.Scheme = parseNode.Text;
                         break;
                     case "parameter":
-                        headerValue.Parameter = parseNode.Text;
+                        headerValue.Parameter = parseNode.ChildNode("parametervalue").Text;
                         break;
                 }
             }

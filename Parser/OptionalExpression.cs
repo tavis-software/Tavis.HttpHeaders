@@ -19,7 +19,7 @@ namespace Tavis.Parser
             foreach (var expression in this)
             {
                 var result = expression.Consume(input);
-                if (result == null || !result.Present)
+                if (result == null || !result.Present || result.GetErrors().Count > 0)
                 {
                     input.MoveToMark();  // If any part of the optional expression fails then it will be considered missing.
                     return new ParseNode(this, "") {Present = false};

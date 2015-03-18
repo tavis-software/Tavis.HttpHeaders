@@ -237,20 +237,35 @@ namespace HeadersTests
         [Fact]
         public void AuthHeader()
         {
-            var authHeader = new Expression("authorization")
-            {
-                new Token("scheme"),
-                new Rws(),
-                new Token("parameter")
-            };
 
-            var authHeaderNode = authHeader.Consume(new Inputdata("Basic asddasdasdasdasd"));
 
-            Assert.Equal("Basic",authHeaderNode.ChildNode("scheme").Text);
-            Assert.Equal("asddasdasdasdasd", authHeaderNode.ChildNode("parameter").Text);
+            var authHeaderNode = AuthorizationHeaderValue.Parse("Basic asddasdasdasdasd");
 
+            Assert.Equal("Basic",authHeaderNode.Scheme);
+            Assert.Equal("asddasdasdasdasd", authHeaderNode.Parameter);
+            Assert.Equal(0, authHeaderNode.Errors.Count);
         }
 
+        [Fact]
+        public void AuthHeaderWithoutParameter()
+        {
+
+            var authHeaderNode = AuthorizationHeaderValue.Parse("Magic");
+
+            Assert.Equal("Magic", authHeaderNode.Scheme);
+            Assert.Equal(null, authHeaderNode.Parameter);
+            Assert.Equal(0, authHeaderNode.Errors.Count);
+        }
+        [Fact]
+        public void AuthHeader_failure_missing_scheme()
+        {
+            var authHeaderNode = AuthorizationHeaderValue.Parse("foo=bar;test=boo");
+
+
+            Assert.Equal("foo", authHeaderNode.Scheme);
+            Assert.Null(authHeaderNode.Parameter);
+            Assert.Equal(1,authHeaderNode.Errors.Count);
+        }
         [Fact]
         public void UnrelatedArbitraryCommandPhrase()
         {
@@ -305,9 +320,9 @@ namespace HeadersTests
                     new Literal("/"),
                     new Headers.QuotedString("test")
                 },
+                new Ows(),
                 new OptionalExpression("paramlist")
                 {
-                    new Rws(),
                     new Literal("with"),
                     new CommaList("parameters",Parameter.Syntax)    
                 }

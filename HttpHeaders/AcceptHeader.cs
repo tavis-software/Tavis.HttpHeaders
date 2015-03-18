@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Headers;
+using Tavis.Headers.Elements;
+using Tavis.Parser;
 
 namespace Tavis.Headers
 {
@@ -21,6 +24,34 @@ namespace Tavis.Headers
 
     public class AcceptHeader
     {
-
+        public IExpression Syntax = new RootExpression("accept")
+        {
+            MediaRange.Syntax,
+            new OptionalExpression("accept-params") {
+            new DelimitedList("weight",";",Qvalue.Syntax),
+            new DelimitedList("accept-ext",";",new Expression()
+            {
+                new Token("accept-ext-name"), 
+                new OrExpression("accept-ext-value")
+                {
+                    new QuotedString("qvalue"),new Token("qtoken")
+                }
+            })
+            }
+        };
+    }
+    
+    public class MediaRange
+    {
+        public static IExpression Syntax = new Expression("media-range")
+        {
+            new OrExpression("media-range-value")
+            {
+                new Literal("*/*"),
+                new Expression() { new Token("type"), new Literal("/*")},
+                MediaType.Syntax
+            },
+            new DelimitedList("parameters",";",Parameter.Syntax)
+        };
     }
 }
