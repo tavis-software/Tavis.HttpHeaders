@@ -238,7 +238,7 @@ namespace HeadersTests
         public void AuthHeader()
         {
 
-            var authHeaderNode = AuthorizationHeaderValue.Parse("Basic asddasdasdasdasd==", AuthorizationHeaderValue.Token68Syntax);
+            var authHeaderNode = AuthorizationHeaderValue.Parse("Basic asddasdasdasdasd==", useToken68: true);
 
             Assert.Equal("Basic",authHeaderNode.Scheme);
             Assert.Equal("asddasdasdasdasd==", authHeaderNode.Token);
@@ -249,7 +249,7 @@ namespace HeadersTests
         public void AuthHeaderWithParameters()
         {
 
-            var authHeaderNode = AuthorizationHeaderValue.Parse("Basic foo=bar,foo=\"ba,z\",yo=blah", AuthorizationHeaderValue.AuthParameters);
+            var authHeaderNode = AuthorizationHeaderValue.Parse("Basic foo=bar,foo=\"ba,z\",yo=blah");
 
             Assert.Equal("Basic", authHeaderNode.Scheme);
             Assert.Equal(3, authHeaderNode.Parameter.Count);
@@ -263,7 +263,7 @@ namespace HeadersTests
         public void AuthHeaderWithoutParameter()
         {
 
-            var authHeaderNode = AuthorizationHeaderValue.Parse("Magic",AuthorizationHeaderValue.AuthParameters);
+            var authHeaderNode = AuthorizationHeaderValue.Parse("Magic");
 
             Assert.Equal("Magic", authHeaderNode.Scheme);
             Assert.Equal(null, authHeaderNode.Parameter);
@@ -272,7 +272,7 @@ namespace HeadersTests
         [Fact]
         public void AuthHeader_failure_missing_scheme()
         {
-            var authHeaderNode = AuthorizationHeaderValue.Parse("foo=bar;test=boo", AuthorizationHeaderValue.AuthParameters);
+            var authHeaderNode = AuthorizationHeaderValue.Parse("foo=bar;test=boo");
 
 
             Assert.Equal("foo", authHeaderNode.Scheme);

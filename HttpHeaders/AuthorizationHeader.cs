@@ -24,8 +24,16 @@ namespace Headers
         public string Token { get; set; }
         public List<string> Errors {get;set;}
 
-        public static AuthorizationHeaderValue Parse(string rawHeaderValue, Expression parameterExpression)
+        public static AuthorizationHeaderValue Parse(string rawHeaderValue, bool useToken68 = false)
         {
+            Expression parameterExpression;
+            if (useToken68)
+            {
+                parameterExpression = Token68Syntax;
+            } else
+            {
+                parameterExpression = AuthParameters;
+            }
             IExpression syntax = new RootExpression("authorization")
             {
                 new Token("scheme"),
