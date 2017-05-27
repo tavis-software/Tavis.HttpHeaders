@@ -73,4 +73,3 @@ Currently only a few of the standard headers are implemented.  More will be comi
 
 This library is a PCL based library and so will work on Windows 8, Windows Phone 7.5, .Net 4.
 
-A nuget package will be released soon.
