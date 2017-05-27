@@ -12,30 +12,30 @@ namespace Headers
     {
         //credentials = auth-scheme [ 1*SP ( token68 / #auth-param ) ]
 
-        private static readonly IExpression _Syntax = new RootExpression("authorization")
-            {
-                new Token("scheme"),
-                
-                new OptionalExpression("parameter") {
-                    new Literal(" "),
-                    new OrExpression("") {
-                        new CommaList("parameterpairs", Tavis.Headers.Elements.Parameter.Syntax),
-                        new Expression("token68") {
+
+        public static Expression Token68Syntax = new Expression("token68") {
                             new BasicRule("token68value",BasicRule.Token68Char),
                             new BasicRule("token68delimiter",c => c == '=',2)
-                        }
-                    }
-                }
-            };
+                        };
+        public static Expression AuthParameters = new CommaList("parameterpairs", Tavis.Headers.Elements.Parameter.Syntax);
 
         public string Scheme { get; set; }
         public List<Parameter> Parameter { get; set; }
         public string Token { get; set; }
         public List<string> Errors {get;set;}
 
-        public static AuthorizationHeaderValue Parse(string rawHeaderValue)
+        public static AuthorizationHeaderValue Parse(string rawHeaderValue, Expression parameterExpression)
         {
-            var node = _Syntax.Consume(new Inputdata(rawHeaderValue));
+            IExpression syntax = new RootExpression("authorization")
+            {
+                new Token("scheme"),
+
+                new OptionalExpression("parameter") {
+                    new Literal(" "),
+                    parameterExpression
+                }
+            };
+            var node = syntax.Consume(new Inputdata(rawHeaderValue));
            
             var headerValue = new AuthorizationHeaderValue
             {
@@ -50,7 +50,16 @@ namespace Headers
                         headerValue.Scheme = parseNode.Text;
                         break;
                     case "parameter":
-                        headerValue.Parameter.Add(Tavis.Headers.Elements.Parameter.Create(parseNode.ChildNode("parametervalue")));
+                        var parameterNode = parseNode.ChildNode("token68");
+                        if (parameterNode != null)
+                        {
+                            headerValue.Token = parameterNode["token68value"].Text + "==";
+                        } else
+                        {
+                            var parametersNode = parseNode.ChildNode("parameterpairs");
+                            headerValue.Parameter = parametersNode.ChildNodes.Select(n => Tavis.Headers.Elements.Parameter.Create(n)).ToList();
+                        }
+                        //headerValue.Parameter.Add(Tavis.Headers.Elements.Parameter.Create());
                         break;
                 }
             }

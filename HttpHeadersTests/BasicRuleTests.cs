@@ -61,5 +61,40 @@ namespace Tavis.HeadersTests
             Assert.Equal("839", node.Text);
         }
 
+        [Fact]
+        public void Delimited_list_of_quoted_strings()
+        {
+            var list = new DelimitedList("list", ",", new QuotedString("value"));
+
+            var input = new Inputdata("\"ab,c\",\"def\",\"ghi\"");
+
+            var node = list.Consume(input);
+            var items = node.ChildNodes.Select(i => i.Text).ToList();
+            Assert.Equal(3, items.Count);
+            Assert.Equal("ab,c", items[0]);
+            Assert.Equal("ghi", items[2]);
+        }
+        [Fact]
+        public void Delimited_list_of_quoted_key_value_pairs()
+        {
+            var list = new DelimitedList("list", ",", new Expression("parameter")
+                                        {
+                                            new Token("name"),
+                                            new Ows(),
+                                            new Literal("="),
+                                            new Ows(),
+                                            new QuotedString("value")
+                                        });
+
+            var input = new Inputdata("foo=\"ab,c\",bar=\"def\",baz=\"ghi\"");
+
+            var node = list.Consume(input);
+            var items = node.ChildNodes.Select(i => new KeyValuePair<string,string>(i["name"].Text,i["value"].Text)).ToList();
+            Assert.Equal(3, items.Count);
+            Assert.Equal("foo", items[0].Key);
+            Assert.Equal("ab,c", items[0].Value);
+            Assert.Equal("baz", items[2].Key);
+            Assert.Equal("ghi", items[2].Value);
+        }
     }
 }

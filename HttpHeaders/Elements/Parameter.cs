@@ -11,7 +11,11 @@ namespace Tavis.Headers.Elements
             new Ows(),
             new Literal("="),
             new Ows(),
-            new Token("value")
+            new OrExpression("value") {
+                new QuotedString("quotedvalue"),
+                new Token("tokenvalue")
+            }
+            
         };
 
 
@@ -25,10 +29,11 @@ namespace Tavis.Headers.Elements
 
         public static Parameter Create(ParseNode node)
         {
+            var valueNode = node["tokenvalue"] ?? node["quotedvalue"];
             return new Parameter()
             {
                 Name = node["name"].Text,
-                Value= node["value"].Text
+                Value = valueNode.Text 
             };
         }
     }

@@ -121,8 +121,8 @@ namespace HeadersTests
             Assert.NotNull(mediatypeNode);
             Assert.NotNull(parametersNode);
             Assert.Equal("application", mediatypeNode.ChildNode("type").Text);
-            Assert.Equal("utf-8", charsetParameter.ChildNode("value").Text);
-            Assert.Equal("false", schemaParameter.ChildNode("value").Text);
+            Assert.Equal("utf-8", charsetParameter.ChildNode("tokenvalue").Text);
+            Assert.Equal("false", schemaParameter.ChildNode("tokenvalue").Text);
         }
 
         [Fact]
@@ -238,11 +238,24 @@ namespace HeadersTests
         public void AuthHeader()
         {
 
-
-            var authHeaderNode = AuthorizationHeaderValue.Parse("Basic asddasdasdasdasd");
+            var authHeaderNode = AuthorizationHeaderValue.Parse("Basic asddasdasdasdasd==", AuthorizationHeaderValue.Token68Syntax);
 
             Assert.Equal("Basic",authHeaderNode.Scheme);
-            Assert.Equal("asddasdasdasdasd", authHeaderNode.Token);
+            Assert.Equal("asddasdasdasdasd==", authHeaderNode.Token);
+            Assert.Equal(0, authHeaderNode.Errors.Count);
+        }
+
+        [Fact]
+        public void AuthHeaderWithParameters()
+        {
+
+            var authHeaderNode = AuthorizationHeaderValue.Parse("Basic foo=bar,foo=\"ba,z\",yo=blah", AuthorizationHeaderValue.AuthParameters);
+
+            Assert.Equal("Basic", authHeaderNode.Scheme);
+            Assert.Equal(3, authHeaderNode.Parameter.Count);
+            Assert.Equal("yo", authHeaderNode.Parameter[2].Name);
+            Assert.Equal("blah", authHeaderNode.Parameter[2].Value);
+            Assert.Equal("ba,z", authHeaderNode.Parameter[1].Value);
             Assert.Equal(0, authHeaderNode.Errors.Count);
         }
 
@@ -250,7 +263,7 @@ namespace HeadersTests
         public void AuthHeaderWithoutParameter()
         {
 
-            var authHeaderNode = AuthorizationHeaderValue.Parse("Magic");
+            var authHeaderNode = AuthorizationHeaderValue.Parse("Magic",AuthorizationHeaderValue.AuthParameters);
 
             Assert.Equal("Magic", authHeaderNode.Scheme);
             Assert.Equal(null, authHeaderNode.Parameter);
@@ -259,7 +272,7 @@ namespace HeadersTests
         [Fact]
         public void AuthHeader_failure_missing_scheme()
         {
-            var authHeaderNode = AuthorizationHeaderValue.Parse("foo=bar;test=boo");
+            var authHeaderNode = AuthorizationHeaderValue.Parse("foo=bar;test=boo", AuthorizationHeaderValue.AuthParameters);
 
 
             Assert.Equal("foo", authHeaderNode.Scheme);

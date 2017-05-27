@@ -24,7 +24,7 @@ namespace HeadersTests
             
             for (int i = 0; i < Iterations; i++)
             {
-                var authHeader = AuthorizationHeaderValue.Parse("foo asdasdasdasdasdasd");
+                var authHeader = AuthorizationHeaderValue.Parse("foo asdasdasdasdasdasd==",AuthorizationHeaderValue.Token68Syntax);
 
             }
             stopwatch.Stop();
