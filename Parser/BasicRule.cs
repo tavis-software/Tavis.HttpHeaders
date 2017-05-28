@@ -43,8 +43,8 @@ namespace Tavis.Parser
                 }
                 size++;
             }
-            var text = input.GetSinceMark();
-            return new ParseNode(this, text);
+
+            return new ParseNode(this, input.GetSinceMark());
         }
 
     }

@@ -4,14 +4,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Headers;
+
 using Tavis.Headers;
 using Tavis.Headers.Elements;
 using Tavis.Parser;
 using Xunit;
 using Xunit.Extensions;
 
-namespace HeadersTests
+namespace Tavis.HeadersTests
 {
     public class RuleTests
     {

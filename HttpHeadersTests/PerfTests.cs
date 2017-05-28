@@ -5,12 +5,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Headers;
+
 using Tavis.Headers;
 using Tavis.Parser;
 using Xunit;
 
-namespace HeadersTests
+namespace Tavis.HeadersTests
 {
     public class PerfTests
     {

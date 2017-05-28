@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Tavis.Parser;
 
-namespace Headers
+namespace Tavis.Headers
 {
 
     public class Token : BasicRule

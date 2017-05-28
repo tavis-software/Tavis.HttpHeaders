@@ -1,6 +1,6 @@
 using Tavis.Parser;
 
-namespace Headers
+namespace Tavis.Headers
 {
     public class SemiColonList : DelimitedList
     {

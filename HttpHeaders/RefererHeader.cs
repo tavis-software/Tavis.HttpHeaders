@@ -14,7 +14,7 @@ namespace Tavis.Headers
     //              / path-rootless
     //              / path-empty
 
-    public class RefererHeader
+    internal class RefererHeader
     {
 
     }

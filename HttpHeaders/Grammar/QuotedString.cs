@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using Tavis.Parser;
 
-namespace Headers
+namespace Tavis.Headers
 {
 
     public class QuotedString : DelimitedToken

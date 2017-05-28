@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Tavis.Headers.Elements;
 using Tavis.Parser;
 
-namespace Headers
+namespace Tavis.Headers
 {
     public class AuthorizationHeaderValue
     {

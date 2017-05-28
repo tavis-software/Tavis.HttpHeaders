@@ -40,7 +40,7 @@ namespace Tavis.Headers
 
 
 
-    public class HostHeader
+    internal class HostHeader
     {
     }
 }

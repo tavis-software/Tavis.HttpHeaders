@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Tavis.HttpHeaders</id>
-    <version>0.9</version>
+    <version>0.9.1</version>
     <title>Tavis.HttpHeaders</title>
     <authors>Darrel Miller</authors>
     <owners>Tavis Software Inc.</owners>

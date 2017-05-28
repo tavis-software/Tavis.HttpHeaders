@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Headers;
 using Tavis.Parser;
 using Xunit;
+using Tavis.Headers;
 
 namespace Tavis.HeadersTests
 {
