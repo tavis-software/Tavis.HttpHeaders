@@ -252,10 +252,10 @@ namespace Tavis.HeadersTests
             var authHeaderNode = AuthorizationHeaderValue.Parse("Basic foo=bar,foo=\"ba,z\",yo=blah");
 
             Assert.Equal("Basic", authHeaderNode.Scheme);
-            Assert.Equal(3, authHeaderNode.Parameter.Count);
-            Assert.Equal("yo", authHeaderNode.Parameter[2].Name);
-            Assert.Equal("blah", authHeaderNode.Parameter[2].Value);
-            Assert.Equal("ba,z", authHeaderNode.Parameter[1].Value);
+            Assert.Equal(3, authHeaderNode.Parameters.Count);
+            Assert.Equal("yo", authHeaderNode.Parameters[2].Name);
+            Assert.Equal("blah", authHeaderNode.Parameters[2].Value);
+            Assert.Equal("ba,z", authHeaderNode.Parameters[1].Value);
             Assert.Equal(0, authHeaderNode.Errors.Count);
         }
 
@@ -266,7 +266,7 @@ namespace Tavis.HeadersTests
             var authHeaderNode = AuthorizationHeaderValue.Parse("Magic");
 
             Assert.Equal("Magic", authHeaderNode.Scheme);
-            Assert.Equal(null, authHeaderNode.Parameter);
+            Assert.Equal(null, authHeaderNode.Parameters);
             Assert.Equal(0, authHeaderNode.Errors.Count);
         }
         [Fact]
@@ -276,7 +276,7 @@ namespace Tavis.HeadersTests
 
 
             Assert.Equal("foo", authHeaderNode.Scheme);
-            Assert.Null(authHeaderNode.Parameter);
+            Assert.Null(authHeaderNode.Parameters);
             Assert.Equal(1,authHeaderNode.Errors.Count);
         }
         [Fact]

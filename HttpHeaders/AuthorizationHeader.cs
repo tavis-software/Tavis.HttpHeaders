@@ -20,7 +20,7 @@ namespace Tavis.Headers
         public static Expression AuthParameters = new CommaList("parameterpairs", Tavis.Headers.Elements.Parameter.Syntax);
 
         public string Scheme { get; set; }
-        public List<Parameter> Parameter { get; set; }
+        public List<Parameter> Parameters { get; set; }
         public string Token { get; set; }
         public List<string> Errors {get;set;}
 
@@ -65,7 +65,7 @@ namespace Tavis.Headers
                         } else
                         {
                             var parametersNode = parseNode.ChildNode("parameterpairs");
-                            headerValue.Parameter = parametersNode.ChildNodes.Select(n => Tavis.Headers.Elements.Parameter.Create(n)).ToList();
+                            headerValue.Parameters = parametersNode.ChildNodes.Select(n => Tavis.Headers.Elements.Parameter.Create(n)).ToList();
                         }
                         //headerValue.Parameter.Add(Tavis.Headers.Elements.Parameter.Create());
                         break;
