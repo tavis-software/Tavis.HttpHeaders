@@ -10,7 +10,7 @@ namespace Tavis.HeadersTests
 {
     public class AcceptHeaderTests
     {
-        [Fact]
+        [Fact(Skip = "To complete")]
         public void Single_wildcard()
         {
             var acceptHeader = AcceptHeader.Parse("*/*");

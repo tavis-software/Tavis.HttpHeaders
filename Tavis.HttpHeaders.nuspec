@@ -14,7 +14,5 @@
 
   <files>
      <file src="HttpHeaders\bin\release\Tavis.HttpHeaders.dll" target="lib\portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10" />
-     <file src="HttpHeaders\bin\release\Tavis.Parser.dll" target="lib\portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10" />
-
   </files>
 </package>
