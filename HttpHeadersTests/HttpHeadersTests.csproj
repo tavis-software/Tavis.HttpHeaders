@@ -69,10 +69,6 @@
       <Project>{90951b7a-f327-4b0c-ba4a-df4a92645058}</Project>
       <Name>HttpHeaders</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Parser\Parser.csproj">
-      <Project>{bb93d773-8db0-4c40-97ff-9a6684b3b890}</Project>
-      <Name>Parser</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

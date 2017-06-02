@@ -33,13 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .NET Framework is automatically included -->
-    <ProjectReference Include="..\Parser\Parser.csproj">
-      <Project>{bb93d773-8db0-4c40-97ff-9a6684b3b890}</Project>
-      <Name>Parser</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="AcceptHeader.cs" />
     <Compile Include="Grammar\DQuote.cs" />
     <Compile Include="Grammar\Lf.cs" />
@@ -54,6 +47,18 @@
     <Compile Include="Elements\Parameter.cs" />
     <Compile Include="Grammar\Ows.cs" />
     <Compile Include="Elements\Product.cs" />
+    <Compile Include="Parser\BasicRule.cs" />
+    <Compile Include="Parser\DelimitedList.cs" />
+    <Compile Include="Parser\DelimitedToken.cs" />
+    <Compile Include="Parser\Expression.cs" />
+    <Compile Include="Parser\IExpression.cs" />
+    <Compile Include="Parser\Inputdata.cs" />
+    <Compile Include="Parser\Literal.cs" />
+    <Compile Include="Parser\OptionalExpression.cs" />
+    <Compile Include="Parser\OrExpression.cs" />
+    <Compile Include="Parser\ParseNode.cs" />
+    <Compile Include="Parser\Terminal.cs" />
+    <Compile Include="Parser\UnaryExpression.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Grammar\Rws.cs" />
     <Compile Include="Grammar\SemiColonList.cs" />
